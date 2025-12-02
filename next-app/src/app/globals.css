@@ -478,3 +478,93 @@ header h1 {
   margin-top: 10px;
   font-weight: bold;
 }
+
+/* Mobile Responsive Styles */
+@media (max-width: 600px) {
+  body {
+    padding: 10px;
+  }
+
+  header h1 {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .card {
+    padding: 1rem;
+    border-radius: 15px;
+  }
+
+  .score-board {
+    font-size: 1.2rem;
+    padding: 8px 15px;
+  }
+
+  .timer-container {
+    font-size: 1.2rem;
+  }
+
+  /* Word Display */
+  .word-display {
+    gap: 5px;
+  }
+
+  .letter-box {
+    width: 30px;
+    height: 40px;
+    font-size: 1.5rem;
+    border-bottom-width: 3px;
+  }
+
+  /* Hints */
+  .hints-section h2 {
+    font-size: 1.5rem;
+  }
+
+  #hints-list {
+    gap: 10px;
+  }
+
+  .hint-card {
+    width: 130px;
+    height: 100px;
+  }
+
+  .hint-card-front {
+    font-size: 1rem;
+  }
+
+  .hint-card-back {
+    font-size: 0.9rem;
+  }
+
+  /* Input Section */
+  .input-section {
+    flex-direction: column;
+  }
+
+  #guess-input {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  #submit-btn {
+    width: 100%;
+    padding: 12px;
+  }
+
+  /* Admin Panel */
+  .admin-content {
+    width: 95%;
+    padding: 20px;
+    max-height: 85vh;
+  }
+
+  .admin-header h2 {
+    font-size: 1.5rem;
+  }
+}
