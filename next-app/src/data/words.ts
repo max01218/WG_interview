@@ -60,5 +60,65 @@ export const words: Word[] = [
         ],
         image: "/images/pumpkin.png",
         example: "We carved a pumpkin for Halloween."
+    },
+    {
+        word: "trick or treat",
+        category: "Halloween",
+        hints: [
+            "Children",
+            "Candy",
+            "House",
+            "knock"
+        ],
+        image: "/images/trick_or_treat.png",
+        example: "Children go trick or treating on Halloween."
+    },
+    {
+        word: "costume",
+        category: "Halloween",
+        hints: [
+            "Clothes",
+            "Look",
+            "Wear",
+            "Party"
+        ],
+        image: "/images/costume.png",
+        example: "She wore a witch costume to the party."
+    },
+    {
+        word: "candy",
+        category: "Halloween",
+        hints: [
+            "Sweet",
+            "Delicious",
+            "Sugar",
+            "Treat"
+        ],
+        image: "/images/candy.png",
+        example: "I got a lot of candy."
+    },
+    {
+        word: "bat",
+        category: "Halloween",
+        hints: [
+            "Animal",
+            "Fly",
+            "Blind",
+            "Vampire"
+        ],
+        image: "/images/bat.png",
+        example: "The bat flew out of the cave."
+    },
+    {
+        word: "skeleton",
+        category: "Halloween",
+        hints: [
+            "Dead",
+            "bones",
+            "Body",
+            "White"
+        ],
+        image: "/images/skeleton.png",
+        example: "The skeleton is made of bones."
     }
 ];

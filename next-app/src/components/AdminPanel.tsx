@@ -14,6 +14,7 @@ export default function AdminPanel({ onClose, onAddWord, onReset }: AdminPanelPr
         hint1: '',
         hint2: '',
         hint3: '',
+        hint4: '',
         image: '',
         example: ''
     });
@@ -23,18 +24,29 @@ export default function AdminPanel({ onClose, onAddWord, onReset }: AdminPanelPr
         setFormData({ ...formData, [e.target.id]: e.target.value });
     };
 
-    const handleSubmit = () => {
-        const { category, word, hint1, hint2, hint3, image, example } = formData;
-        const hints = [hint1, hint2, hint3].filter(h => h.trim() !== "");
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setFormData({ ...formData, image: reader.result as string });
+            };
+            reader.readAsDataURL(file);
+        }
+    };
 
-        if (!word || hints.length < 1 || !category) {
-            setMsg({ text: "Please fill in Category, Word, and at least 1 Hint.", type: "error" });
+    const handleSubmit = () => {
+        const { word, hint1, hint2, hint3, hint4, image, example } = formData;
+        const hints = [hint1, hint2, hint3, hint4].filter(h => h.trim() !== "");
+
+        if (!word || hints.length < 1) {
+            setMsg({ text: "Please fill in Word and at least 1 Hint.", type: "error" });
             return;
         }
 
         const newWord: Word = {
             word: word.trim(),
-            category: category.trim(),
+            category: "Custom", // Default category
             hints,
             image: image.trim() || `https://loremflickr.com/600/400/${word.trim()}`,
             example: example.trim()
@@ -50,17 +62,13 @@ export default function AdminPanel({ onClose, onAddWord, onReset }: AdminPanelPr
             hint1: '',
             hint2: '',
             hint3: '',
+            hint4: '',
             image: '',
             example: ''
         });
     };
 
     const handleDownload = () => {
-        // This is a bit tricky in React/Next.js client-side, but we can simulate the download
-        // We'll need to get the current words from the parent or context, but for now let's just show a message
-        // or we can pass the full word list to AdminPanel if needed.
-        // For simplicity, let's just assume the user knows this only downloads the *initial* file structure 
-        // or we can skip this feature for now as LocalStorage is the main persistence method.
         alert("Download feature is simplified in this version. Please rely on Local Storage persistence.");
     };
 
@@ -74,10 +82,7 @@ export default function AdminPanel({ onClose, onAddWord, onReset }: AdminPanelPr
 
                 <div className="add-word-form">
                     <h3>Add New Word</h3>
-                    <div className="form-group">
-                        <label>Category:</label>
-                        <input type="text" id="category" value={formData.category} onChange={handleChange} placeholder="e.g., Animals" />
-                    </div>
+                    {/* Category field removed */}
                     <div className="form-group">
                         <label>Word:</label>
                         <input type="text" id="word" value={formData.word} onChange={handleChange} placeholder="e.g., Apple" />
@@ -95,8 +100,13 @@ export default function AdminPanel({ onClose, onAddWord, onReset }: AdminPanelPr
                         <input type="text" id="hint3" value={formData.hint3} onChange={handleChange} placeholder="e.g., Keeps the doctor away" />
                     </div>
                     <div className="form-group">
-                        <label>Image URL (optional):</label>
-                        <input type="text" id="image" value={formData.image} onChange={handleChange} placeholder="e.g., https://example.com/apple.jpg" />
+                        <label>Hint 4:</label>
+                        <input type="text" id="hint4" value={formData.hint4} onChange={handleChange} placeholder="e.g., Grows on trees" />
+                    </div>
+                    <div className="form-group">
+                        <label>Image URL (or Upload):</label>
+                        <input type="text" id="image" value={formData.image} onChange={handleChange} placeholder="e.g., https://example.com/apple.jpg" style={{ marginBottom: '10px' }} />
+                        <input type="file" accept="image/*" onChange={handleFileChange} />
                     </div>
                     <div className="form-group">
                         <label>Example Sentence:</label>

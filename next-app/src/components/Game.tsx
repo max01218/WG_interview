@@ -4,25 +4,57 @@ import { words as initialWords } from '../data/words';
 import StartScreen from './StartScreen';
 import WordDisplay from './WordDisplay';
 import Hints from './Hints';
+import AdminPanel from './AdminPanel';
 import { Word } from '../types';
 
 export default function Game() {
     // Game Data State
     const [gameWords, setGameWords] = useState<Word[]>([]);
+    const [customWords, setCustomWords] = useState<Word[]>([]);
 
     // Game Play State
     const [gameState, setGameState] = useState<'start' | 'playing' | 'win'>('start');
     const [currentWordIndex, setCurrentWordIndex] = useState(0);
+    const [showAdmin, setShowAdmin] = useState(false);
 
     // Input State
     const [guess, setGuess] = useState('');
     const [revealedLetters, setRevealedLetters] = useState<{ [key: number]: string }>({});
     const [feedback, setFeedback] = useState({ text: '', type: '' });
     const [isCorrect, setIsCorrect] = useState(false);
+    const [wrongGuesses, setWrongGuesses] = useState(0);
+
+    // Load custom words on mount
+    useEffect(() => {
+        const savedWords = localStorage.getItem('customWords');
+        if (savedWords) {
+            try {
+                setCustomWords(JSON.parse(savedWords));
+            } catch (e) {
+                console.error("Failed to parse custom words", e);
+            }
+        }
+    }, []);
+
+    const handleAddWord = (newWord: Word) => {
+        const updatedWords = [...customWords, newWord];
+        setCustomWords(updatedWords);
+        localStorage.setItem('customWords', JSON.stringify(updatedWords));
+    };
+
+    const handleResetWords = () => {
+        if (confirm("Are you sure you want to delete all custom words?")) {
+            setCustomWords([]);
+            localStorage.removeItem('customWords');
+        }
+    };
 
     const startGame = () => {
+        // Combine initial words and custom words
+        const allWords = [...initialWords, ...customWords];
+
         // Pick one random word
-        const randomWord = initialWords[Math.floor(Math.random() * initialWords.length)];
+        const randomWord = allWords[Math.floor(Math.random() * allWords.length)];
         setGameWords([randomWord]);
         setCurrentWordIndex(0);
         setGameState('playing');
@@ -34,6 +66,7 @@ export default function Game() {
         setRevealedLetters({});
         setFeedback({ text: '', type: '' });
         setIsCorrect(false);
+        setWrongGuesses(0);
     };
 
     const handleGuessInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,29 +94,32 @@ export default function Game() {
         if (userGuess === correctWord) {
             handleCorrectAnswer(currentWordData);
         } else {
-            setFeedback({ text: "Try again! ❌", type: 'error shake' });
-            setTimeout(() => setFeedback(prev => ({ ...prev, type: 'error' })), 500);
+            const newWrongGuesses = wrongGuesses + 1;
+            setWrongGuesses(newWrongGuesses);
+
+            if (newWrongGuesses >= 3) {
+                // Reveal answer and end game (show popup)
+                handleCorrectAnswer(currentWordData, true); // Pass true for 'forced reveal'
+            } else {
+                setFeedback({ text: `Wrong! (${newWrongGuesses}/3) ❌`, type: 'error shake' });
+                setTimeout(() => setFeedback(prev => ({ ...prev, type: 'error' })), 500);
+            }
         }
     };
 
-    const handleCorrectAnswer = (wordData: Word) => {
+    const handleCorrectAnswer = (wordData: Word, forced = false) => {
         // Reveal all green
         const newRevealed: { [key: number]: string } = {};
         wordData.word.split('').forEach((l, i) => newRevealed[i] = l);
         setRevealedLetters(newRevealed);
 
-        setFeedback({ text: "Correct! Great Job! 🎉", type: 'success pop' });
+        if (forced) {
+            setFeedback({ text: `Out of tries! The word was "${wordData.word}".`, type: 'error' });
+        } else {
+            setFeedback({ text: "Correct! Great Job! 🎉", type: 'success pop' });
+        }
         setIsCorrect(true);
         speak(wordData.word);
-    };
-
-    const nextWord = () => {
-        if (currentWordIndex >= gameWords.length - 1) {
-            setGameState('win');
-        } else {
-            setCurrentWordIndex(prev => prev + 1);
-            resetWordState();
-        }
     };
 
     const speak = (text: string | string[]) => {
@@ -104,22 +140,23 @@ export default function Game() {
     };
 
     // Renders
+    if (showAdmin) {
+        return (
+            <AdminPanel
+                onClose={() => setShowAdmin(false)}
+                onAddWord={handleAddWord}
+                onReset={handleResetWords}
+            />
+        );
+    }
+
     if (gameState === 'start') {
         return (
             <StartScreen
                 categories={[]}
                 onStart={startGame}
+                onOpenAdmin={() => setShowAdmin(true)}
             />
-        );
-    }
-
-    if (gameState === 'win') {
-        return (
-            <div className="card" style={{ borderColor: '#2ECC71' }}>
-                <h2 style={{ color: '#2ECC71' }}>Congratulations! 🎉</h2>
-                <p>You completed the Halloween Challenge!</p>
-                <button id="submit-btn" onClick={() => setGameState('start')}>Play Again</button>
-            </div>
         );
     }
 
@@ -184,7 +221,8 @@ export default function Game() {
             {isCorrect && (
                 <div className="popup-overlay">
                     <div className="popup-content">
-                        <h2>Correct! Great Job! 🎉</h2>
+                        <h2>{wrongGuesses >= 3 ? "Out of tries! 😅" : "Correct! Great Job! 🎉"}</h2>
+                        {wrongGuesses >= 3 && <p style={{ fontSize: '1.2rem', marginBottom: '15px' }}>The word was: <strong>{gameWords[currentWordIndex].word}</strong></p>}
                         <button
                             id="play-again-btn"
                             onClick={() => setGameState('start')}
