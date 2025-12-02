@@ -1,7 +1,6 @@
-// This file contains the words and hints for the game.
-// You can add more words here following the same format.
+import { Word } from '../types';
 
-const words = [
+export const words: Word[] = [
     {
         word: "cat",
         category: "Animals",
