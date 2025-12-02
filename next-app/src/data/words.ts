@@ -2,58 +2,63 @@ import { Word } from '../types';
 
 export const words: Word[] = [
     {
+        word: "monster",
+        category: "Halloween",
+        hints: [
+            "scary",
+            "animal",
+            "bad",
+            "dangerous"
+        ],
+        image: "/images/monster.png",
+        example: "The monster is under the bed."
+    },
+    {
+        word: "vampire",
+        category: "Halloween",
+        hints: [
+            "teeth",
+            "blood",
+            "night",
+            "bat"
+        ],
+        image: "/images/vampire.png",
+        example: "The vampire sleeps in a coffin."
+    },
+    {
+        word: "mummy",
+        category: "Halloween",
+        hints: [
+            "dead",
+            "bandages",
+            "Egypt",
+            "Human"
+        ],
+        image: "/images/mummy.png",
+        example: "The mummy is wrapped in white cloth."
+    },
+    {
         word: "cat",
-        category: "Animals",
+        category: "Halloween",
         hints: [
-            "Has 4 legs",
-            "Has fur",
-            "Common pet that says 'Meow'"
+            "animal",
+            "pet",
+            "Bad luck",
+            "walk"
         ],
-        image: "https://loremflickr.com/600/400/cat",
-        example: "The cat is sleeping on the sofa."
+        image: "/images/cat.png",
+        example: "The black cat crossed the road."
     },
     {
-        word: "banana",
-        category: "Food",
+        word: "pumpkin",
+        category: "Halloween",
         hints: [
-            "It is a fruit",
-            "It is yellow and curved",
-            "Monkeys love to eat it"
+            "food",
+            "vegetable",
+            "lantern",
+            "orange"
         ],
-        image: "https://loremflickr.com/600/400/banana",
-        example: "I eat a banana for breakfast."
-    },
-    {
-        word: "school",
-        category: "Places",
-        hints: [
-            "A place to learn",
-            "Has teachers and students",
-            "You go there every weekday"
-        ],
-        image: "https://loremflickr.com/600/400/school",
-        example: "We go to school by bus."
-    },
-    {
-        word: "doctor",
-        category: "Jobs",
-        hints: [
-            "Works in a hospital",
-            "Helps sick people",
-            "Wears a white coat"
-        ],
-        image: "https://loremflickr.com/600/400/doctor",
-        example: "The doctor gave me some medicine."
-    },
-    {
-        word: "sun",
-        category: "Nature",
-        hints: [
-            "It is in the sky",
-            "It is very hot and bright",
-            "It comes out during the day"
-        ],
-        image: "https://loremflickr.com/600/400/sun",
-        example: "The sun is shining brightly today."
+        image: "/images/pumpkin.png",
+        example: "We carved a pumpkin for Halloween."
     }
 ];

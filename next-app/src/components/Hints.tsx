@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 interface HintsProps {
     hints: string[];
@@ -6,7 +6,7 @@ interface HintsProps {
 }
 
 export default function Hints({ hints, onSpeak }: HintsProps) {
-    const [flipped, setFlipped] = React.useState<{ [key: number]: boolean }>({});
+    const [flipped, setFlipped] = useState<{ [key: number]: boolean }>({});
 
     const toggleFlip = (index: number) => {
         setFlipped(prev => ({ ...prev, [index]: !prev[index] }));
