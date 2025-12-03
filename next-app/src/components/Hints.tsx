@@ -2,16 +2,12 @@ import React, { useState } from 'react';
 
 interface HintsProps {
     hints: string[];
+    revealedIndices: Set<number>;
+    onRevealHint: (index: number) => void;
     onSpeak: (text: string | string[]) => void;
 }
 
-export default function Hints({ hints, onSpeak }: HintsProps) {
-    const [flipped, setFlipped] = useState<{ [key: number]: boolean }>({});
-
-    const toggleFlip = (index: number) => {
-        setFlipped(prev => ({ ...prev, [index]: !prev[index] }));
-    };
-
+export default function Hints({ hints, revealedIndices, onRevealHint, onSpeak }: HintsProps) {
     return (
         <div className="hints-section">
             <div className="hints-header">
@@ -20,7 +16,12 @@ export default function Hints({ hints, onSpeak }: HintsProps) {
                     id="tts-btn"
                     className="icon-btn"
                     title="Read Hints"
-                    onClick={() => onSpeak(hints)}
+                    onClick={() => {
+                        const revealedHints = hints.filter((_, i) => revealedIndices.has(i));
+                        if (revealedHints.length > 0) {
+                            onSpeak(revealedHints);
+                        }
+                    }}
                 >
                     🔊
                 </button>
@@ -29,8 +30,8 @@ export default function Hints({ hints, onSpeak }: HintsProps) {
                 {hints.map((hint, index) => (
                     <li
                         key={index}
-                        className={`hint-card ${flipped[index] ? 'flipped' : ''}`}
-                        onClick={() => toggleFlip(index)}
+                        className={`hint-card ${revealedIndices.has(index) ? 'flipped' : ''}`}
+                        onClick={() => onRevealHint(index)}
                     >
                         <div className="hint-card-inner">
                             <div className="hint-card-front">Hint {index + 1}</div>

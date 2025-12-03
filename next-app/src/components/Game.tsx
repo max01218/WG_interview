@@ -24,6 +24,10 @@ export default function Game() {
     const [isCorrect, setIsCorrect] = useState(false);
     const [wrongGuesses, setWrongGuesses] = useState(0);
 
+    // Scoring & Hints State
+    const [revealedHintIndices, setRevealedHintIndices] = useState<Set<number>>(new Set());
+    const [score, setScore] = useState(0);
+
     // Load custom words on mount
     useEffect(() => {
         const savedWords = localStorage.getItem('customWords');
@@ -67,6 +71,15 @@ export default function Game() {
         setFeedback({ text: '', type: '' });
         setIsCorrect(false);
         setWrongGuesses(0);
+        setRevealedHintIndices(new Set());
+        setScore(0);
+    };
+
+    const handleHintReveal = (index: number) => {
+        if (isCorrect || wrongGuesses >= 3) return; // Lock hints if game over
+        const newSet = new Set(revealedHintIndices);
+        newSet.add(index);
+        setRevealedHintIndices(newSet);
     };
 
     const handleGuessInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -115,8 +128,36 @@ export default function Game() {
 
         if (forced) {
             setFeedback({ text: `Out of tries! The word was "${wordData.word}".`, type: 'error' });
+            setScore(0);
         } else {
-            setFeedback({ text: "Correct! Great Job! 🎉", type: 'success pop' });
+            // Calculate Score
+            // 0 hints = 100? The user said "Open hint1 get 100" which implies 1 hint used = 100?
+            // Wait, "Open hint1 get 100" might mean if you guess it AFTER opening hint 1?
+            // "Open hint2 get 75" -> 2 hints used.
+            // "Open hint 3 get 50" -> 3 hints used.
+            // "Open hint4 get 25" -> 4 hints used.
+            // If 0 hints used? Probably 100 or bonus? Let's assume max is 100 for now as per "hint1 get 100".
+            // Actually, usually "Open hint 1" means you used 1 hint.
+            // Let's stick to the user's table:
+            // 1 hint -> 100
+            // 2 hints -> 75
+            // 3 hints -> 50
+            // 4 hints -> 25
+            // What if 0 hints? Let's give 100 as well or maybe 125? 
+            // The prompt says: "如果打開hint1就猜到答案，那我們可不可以加分數，例如hint1猜到答案100分"
+            // "If open hint1 then guess answer, can we add score, e.g. hint1 guess answer 100 points"
+            // It seems 1 hint is the baseline for 100.
+            // I will map count to score.
+
+            const hintsUsed = revealedHintIndices.size;
+            let finalScore = 0;
+            if (hintsUsed <= 1) finalScore = 100;
+            else if (hintsUsed === 2) finalScore = 75;
+            else if (hintsUsed === 3) finalScore = 50;
+            else finalScore = 25;
+
+            setScore(finalScore);
+            setFeedback({ text: `Correct! Score: ${finalScore} 🎉`, type: 'success pop' });
         }
         setIsCorrect(true);
         speak(wordData.word);
@@ -170,15 +211,6 @@ export default function Game() {
             </div>
 
             <div className="card" style={{ borderColor: isCorrect ? '#2ECC71' : 'var(--secondary-color)' }}>
-                {/* Image Always Shown */}
-                <div id="result-image-container" style={{ marginBottom: '20px', textAlign: 'center' }}>
-                    <img
-                        id="result-image"
-                        src={currentWordData.image}
-                        alt="Word Image"
-                        style={{ maxWidth: '100%', maxHeight: '200px', borderRadius: '10px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}
-                    />
-                </div>
 
                 <WordDisplay
                     word={currentWordData.word}
@@ -188,6 +220,8 @@ export default function Game() {
 
                 <Hints
                     hints={currentWordData.hints}
+                    revealedIndices={revealedHintIndices}
+                    onRevealHint={handleHintReveal}
                     onSpeak={speak}
                 />
 
@@ -221,7 +255,14 @@ export default function Game() {
             {isCorrect && (
                 <div className="popup-overlay">
                     <div className="popup-content">
-                        <h2>{wrongGuesses >= 3 ? "Out of tries! 😅" : "Correct! Great Job! 🎉"}</h2>
+                        <h2>{wrongGuesses >= 3 ? "Out of tries! 😅" : `Correct! +${score} pts 🎉`}</h2>
+                        <div style={{ margin: '20px 0' }}>
+                            <img
+                                src={gameWords[currentWordIndex].image}
+                                alt="Answer"
+                                style={{ maxWidth: '100%', maxHeight: '200px', borderRadius: '10px', boxShadow: '0 4px 8px rgba(0,0,0,0.2)' }}
+                            />
+                        </div>
                         {wrongGuesses >= 3 && <p style={{ fontSize: '1.2rem', marginBottom: '15px' }}>The word was: <strong>{gameWords[currentWordIndex].word}</strong></p>}
                         <button
                             id="play-again-btn"
