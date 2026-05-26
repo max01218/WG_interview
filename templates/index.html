@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WisdomGarden 智慧結帳與購物車控制面板</title>
+    <!-- 載入 Google FontsOutfit & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- 引入自訂樣式表 -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="decor-circle circle-1"></div>
+    <div class="decor-circle circle-2"></div>
+    <div class="decor-circle circle-3"></div>
+
+    <div class="app-container">
+        <!-- 頂部導航與標題 -->
+        <header class="app-header animate-fade-in">
+            <div class="logo-area">
+                <span class="logo-icon">WG</span>
+                <div class="logo-text">
+                    <h1>WisdomGarden</h1>
+                    <p>Smart Checkout Dashboard</p>
+                </div>
+            </div>
+            <div class="header-badge">
+                <span class="status-dot"></span>
+                <span>結帳引擎正常運行中</span>
+            </div>
+        </header>
+
+        <!-- 主控制面板 -->
+        <main class="dashboard-grid">
+            
+            <!-- 左側：輸入編輯面板 -->
+            <section class="panel editor-panel animate-slide-up">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <h2>結帳參數輸入區</h2>
+                    </div>
+                    <span class="panel-subtitle">請依照規格輸入促銷、購物車明細與優惠券</span>
+                </div>
+
+                <div class="editor-container">
+                    <textarea id="cartInput" placeholder="// 請輸入購物車資料...
+2015.11.11|0.7|電子
+
+1*ipad:2399.00
+1*顯示器:1799.00
+12*啤酒:25.00
+5*麵包:9.00
+
+2015.11.11
+2016.3.2 1000 200"></textarea>
+                </div>
+
+                <div class="editor-actions">
+                    <button class="btn btn-secondary" id="btnCaseA">套用 Case A</button>
+                    <button class="btn btn-secondary" id="btnCaseB">套用 Case B</button>
+                    <button class="btn btn-danger" id="btnClear">清空</button>
+                    <button class="btn btn-primary" id="btnCheckout">
+                        <span>開始結算</span>
+                        <svg class="arrow-icon" viewBox="0 0 24 24" width="16" height="16">
+                            <path fill="currentColor" d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-8.29-1.42 1.42L16.86 11H5v2z"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- 錯誤與狀態回饋區 -->
+                <div class="alert-box error-alert hidden" id="errorBox">
+                    <p id="errorMessage">解析失敗，請檢查輸入格式是否正確。</p>
+                </div>
+
+                <!-- 商品目錄卡片 -->
+                <div class="directory-card">
+                    <div class="directory-header" id="toggleDirectory">
+                        <span class="directory-title">系統初始註冊商品目錄 (點擊展開/收起)</span>
+                        <span class="directory-chevron" id="directoryChevron">▼</span>
+                    </div>
+                    <div class="directory-body" id="directoryBody">
+                        <div class="category-group">
+                            <span class="category-tag tag-electronics">電子</span>
+                            <p>ipad, iphone, 顯示器, 筆記型電腦, 鍵盤</p>
+                        </div>
+                        <div class="category-group">
+                            <span class="category-tag tag-food">食品</span>
+                            <p>麵包, 餅乾, 蛋糕, 牛肉, 魚, 蔬菜</p>
+                        </div>
+                        <div class="category-group">
+                            <span class="category-tag tag-daily">日用品</span>
+                            <p>餐巾紙, 收納箱, 咖啡杯, 雨傘</p>
+                        </div>
+                        <div class="category-group">
+                            <span class="category-tag tag-alcohol">酒類</span>
+                            <p>啤酒, 白酒, 伏特加</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 右側：視覺化收據明細 -->
+            <section class="panel receipt-panel animate-slide-up" style="animation-delay: 0.1s;">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <h2>視覺化結帳收據</h2>
+                    </div>
+                    <span class="panel-subtitle">系統將進行高精度計算並拆解所有折扣細項</span>
+                </div>
+
+                <!-- 收據預設佔位 -->
+                <div class="receipt-placeholder" id="receiptPlaceholder">
+                    <div class="placeholder-animation">Cart</div>
+                    <h3>等待結算中...</h3>
+                    <p>請於左側輸入資料，並點選「開始結算」以生成高精度的明細帳單。</p>
+                </div>
+
+                <!-- 實際收據 -->
+                <div class="receipt hidden" id="receiptContent">
+                    <div class="receipt-header">
+                        <h3>WISDOM GARDEN INC.</h3>
+                        <p class="receipt-date">結算日期：<span id="resDate">-</span></p>
+                        <div class="receipt-barcode">||||| | |||| ||| || ||||</div>
+                    </div>
+
+                    <div class="receipt-divider"></div>
+
+                    <!-- 商品清單 -->
+                    <div class="receipt-section">
+                        <h4>購買商品明細</h4>
+                        <div class="item-list" id="resItemList">
+                            <!-- JS 動態生成 -->
+                        </div>
+                    </div>
+
+                    <div class="receipt-divider"></div>
+
+                    <!-- 促銷與優惠計算過程 -->
+                    <div class="receipt-section billing-summary">
+                        <div class="billing-row">
+                            <span>原始商品小計</span>
+                            <span class="price-val" id="resRawSubtotal">$ 0.00</span>
+                        </div>
+                        <div class="billing-row text-savings">
+                            <span>品類促銷折抵金額</span>
+                            <span class="price-val" id="resPromoSavings">-$ 0.00</span>
+                        </div>
+                        <div class="billing-row">
+                            <span>品類促銷後總額</span>
+                            <span class="price-val" id="resDiscountedSubtotal">$ 0.00</span>
+                        </div>
+                        
+                        <!-- 優惠券展示區 -->
+                        <div class="coupon-status-card" id="resCouponCard">
+                            <div class="coupon-header">
+                                <span class="coupon-title">電子折價券套用狀態</span>
+                            </div>
+                            <div class="coupon-details">
+                                <p>過期日：<span id="couponExpire">-</span></p>
+                                <p>套用條件：滿 <span id="couponThreshold">-</span> 折 <span id="couponDiscount">-</span></p>
+                                <div class="coupon-status-badge" id="couponStatusBadge">未啟用</div>
+                            </div>
+                        </div>
+
+                        <div class="billing-row text-savings" id="couponSavingsRow">
+                            <span>折價券折抵金額</span>
+                            <span class="price-val" id="resCouponSavings">-$ 0.00</span>
+                        </div>
+                    </div>
+
+                    <div class="receipt-divider-thick"></div>
+
+                    <!-- 最終結帳金額 -->
+                    <div class="receipt-total-section">
+                        <div class="total-label">
+                            <h3>實際需支付金額</h3>
+                            <p>已採用 ROUND_HALF_UP 四捨五入處理</p>
+                        </div>
+                        <div class="total-amount-display">
+                            <span class="currency-symbol">$</span>
+                            <span class="amount-val" id="resFinalTotal">0.00</span>
+                        </div>
+                    </div>
+
+                    <!-- 底部謝卡 -->
+                    <div class="receipt-footer">
+                        <p>感謝您的光臨，本系統採用高精度 Decimal 結算！</p>
+                        <p class="footer-slogan">用科技改變教育，讓教學與管理更簡單</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- 載入控制邏輯 -->
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

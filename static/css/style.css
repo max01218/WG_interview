@@ -1,0 +1,751 @@
+/* CSS 設計系統與變數定義 */
+:root {
+    --bg-app: #0b0f19;
+    --bg-panel: rgba(17, 25, 40, 0.75);
+    --border-glass: rgba(255, 255, 255, 0.08);
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    
+    --color-primary: #6366f1;
+    --color-primary-hover: #4f46e5;
+    --color-success: #10b981;
+    --color-success-bg: rgba(16, 185, 129, 0.12);
+    --color-danger: #ef4444;
+    --color-danger-hover: #dc2626;
+    --color-accent: #f59e0b;
+
+    --font-heading: 'Outfit', 'Inter', sans-serif;
+    --font-body: 'Inter', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+    background-color: var(--bg-app);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow-x: hidden;
+    padding: 2rem 1rem;
+}
+
+/* 背景霓虹裝飾光圈 */
+.decor-circle {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.45;
+}
+
+.circle-1 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.6) 0%, rgba(139, 92, 246, 0.1) 80%);
+    top: -100px;
+    left: -100px;
+}
+
+.circle-2 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.4) 0%, rgba(5, 150, 105, 0.05) 80%);
+    bottom: -150px;
+    right: -100px;
+}
+
+.circle-3 {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(245, 158, 11, 0.3) 0%, rgba(217, 119, 6, 0) 80%);
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* 主容器 */
+.app-container {
+    width: 100%;
+    max-width: 1200px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* 頂部 Header */
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-panel);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--border-glass);
+    border-radius: 16px;
+    padding: 1.25rem 2rem;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logo-icon {
+    font-size: 2.25rem;
+    filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.5));
+}
+
+.logo-text h1 {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.logo-text p {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.header-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 30px;
+    padding: 0.4rem 1rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background-color: var(--color-success);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--color-success);
+    animation: pulse 2s infinite;
+}
+
+/* 控制面板 Grid */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 1.5rem;
+}
+
+@media (max-width: 968px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 玻璃面板通用樣式 */
+.panel {
+    background: var(--bg-panel);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--border-glass);
+    border-radius: 20px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.panel-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.panel-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.panel-icon {
+    font-size: 1.5rem;
+}
+
+.panel-title h2 {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.panel-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+/* 編輯器容器與文字框 */
+.editor-container {
+    flex-grow: 1;
+    position: relative;
+}
+
+textarea {
+    width: 100%;
+    height: 280px;
+    background: rgba(10, 15, 30, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.25rem;
+    color: #e2e8f0;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    resize: none;
+    outline: none;
+}
+
+textarea:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.25);
+    background: rgba(10, 15, 30, 0.8);
+}
+
+/* 按鈕樣式 */
+.editor-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.btn {
+    border: none;
+    border-radius: 10px;
+    padding: 0.75rem 1.25rem;
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    font-weight: 550;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--color-primary) 0%, #818cf8 100%);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+    margin-left: auto;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+    background: linear-gradient(135deg, var(--color-primary-hover) 0%, #6366f1 100%);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+.btn-danger {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #fca5a5;
+}
+
+.btn-danger:hover {
+    background: var(--color-danger);
+    color: #fff;
+    border-color: transparent;
+}
+
+.arrow-icon {
+    transition: transform 0.25s;
+}
+
+.btn-primary:hover .arrow-icon {
+    transform: translateX(4px);
+}
+
+/* 警報提示區 */
+.alert-box {
+    display: flex;
+    gap: 0.75rem;
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 12px;
+    padding: 1rem;
+    color: #fca5a5;
+    font-size: 0.85rem;
+    align-items: center;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* 商品目錄卡片 */
+.directory-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.directory-header {
+    padding: 0.9rem 1.25rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.directory-header:hover {
+    background: rgba(255, 255, 255, 0.07);
+}
+
+.directory-title {
+    font-size: 0.85rem;
+    font-weight: 550;
+    color: var(--text-secondary);
+}
+
+.directory-chevron {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.directory-body {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.category-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.category-group p {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    padding-left: 0.5rem;
+}
+
+/* 標籤設計 */
+.category-tag {
+    align-self: flex-start;
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
+}
+
+.tag-electronics {
+    background: rgba(59, 130, 246, 0.12);
+    color: #60a5fa;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.tag-food {
+    background: rgba(249, 115, 22, 0.12);
+    color: #fb923c;
+    border: 1px solid rgba(249, 115, 22, 0.2);
+}
+
+.tag-daily {
+    background: rgba(168, 85, 247, 0.12);
+    color: #c084fc;
+    border: 1px solid rgba(168, 85, 247, 0.2);
+}
+
+.tag-alcohol {
+    background: rgba(234, 179, 8, 0.12);
+    color: #facc15;
+    border: 1px solid rgba(234, 179, 8, 0.2);
+}
+
+.tag-other {
+    background: rgba(100, 116, 139, 0.12);
+    color: #94a3b8;
+    border: 1px solid rgba(100, 116, 139, 0.2);
+}
+
+/* 右側：收據佔位與內容 */
+.receipt-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 6rem 2rem;
+    text-align: center;
+    color: var(--text-secondary);
+    border: 2px dashed rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.01);
+}
+
+.placeholder-animation {
+    font-size: 3.5rem;
+    animation: float 3s ease-in-out infinite;
+}
+
+.receipt-placeholder h3 {
+    font-family: var(--font-heading);
+    color: var(--text-primary);
+    font-size: 1.15rem;
+}
+
+.receipt-placeholder p {
+    font-size: 0.8rem;
+    max-width: 280px;
+}
+
+/* 視覺化收據樣式 */
+.receipt {
+    background: #ffffff;
+    color: #1e293b;
+    border-radius: 16px;
+    padding: 2.25rem 2rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), inset 0 0 40px rgba(0, 0, 0, 0.02);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    animation: printEffect 0.6s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+/* 收據裝飾鋸齒邊 */
+.receipt::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 10px;
+    background-image: linear-gradient(135deg, transparent 45%, #fff 45%), linear-gradient(225deg, transparent 45%, #fff 45%);
+    background-size: 12px 24px;
+    transform: translateY(5px);
+}
+
+.receipt-header {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.receipt-header h3 {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    color: #0f172a;
+}
+
+.receipt-date {
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+.receipt-barcode {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9rem;
+    font-weight: bold;
+    letter-spacing: 3px;
+    color: #475569;
+    margin-top: 0.5rem;
+}
+
+/* 收據分割線 */
+.receipt-divider {
+    border-top: 1px dashed #cbd5e1;
+    margin: 0.5rem 0;
+}
+
+.receipt-divider-thick {
+    border-top: 2px solid #0f172a;
+    margin: 0.5rem 0;
+}
+
+.receipt-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.receipt-section h4 {
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #64748b;
+    letter-spacing: 0.5px;
+}
+
+/* 收據商品行項目 */
+.item-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.item-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.item-main {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    font-weight: 550;
+    color: #1e293b;
+}
+
+.item-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
+.item-discount-pill {
+    background: rgba(16, 185, 129, 0.1);
+    color: #059669;
+    font-weight: 600;
+    padding: 0.05rem 0.35rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+}
+
+/* 促銷匯總 */
+.billing-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.billing-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: #475569;
+}
+
+.price-val {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.text-savings {
+    color: #059669;
+}
+
+.text-savings .price-val {
+    color: #059669;
+}
+
+/* 優惠券展示卡片 */
+.coupon-status-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin: 0.25rem 0;
+}
+
+.coupon-header {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.coupon-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #334155;
+}
+
+.coupon-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    color: #64748b;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.coupon-status-badge {
+    padding: 0.15rem 0.5rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.7rem;
+}
+
+.badge-success {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.badge-fail {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.badge-inactive {
+    background-color: #f1f5f9;
+    color: #475569;
+}
+
+/* 結算大金額區 */
+.receipt-total-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+}
+
+.total-label h3 {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.total-label p {
+    font-size: 0.7rem;
+    color: #64748b;
+}
+
+.total-amount-display {
+    display: flex;
+    align-items: baseline;
+    gap: 0.2rem;
+    color: #0f172a;
+}
+
+.currency-symbol {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 800;
+}
+
+.amount-val {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.receipt-footer {
+    text-align: center;
+    font-size: 0.75rem;
+    color: #64748b;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-top: 0.5rem;
+}
+
+.footer-slogan {
+    font-weight: 550;
+    color: #475569;
+}
+
+/* 關鍵動畫定義 */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes printEffect {
+    0% {
+        transform: translateY(-40px) scale(0.96);
+        opacity: 0;
+        max-height: 0;
+    }
+    100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+        max-height: 1000px;
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slide-up {
+    animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
