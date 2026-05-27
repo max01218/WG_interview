@@ -6,35 +6,12 @@
 
 ## 系統架構
 
-### 1. 模組關聯圖 (Mermaid)
-
-```mermaid
-graph TD
-    classDef default fill:#fafafa,stroke:#ddd,stroke-width:1px;
-    classDef ui fill:#eef2f7,stroke:#4a90e2,stroke-width:1.5px;
-    classDef app fill:#eefaf2,stroke:#2ecc71,stroke-width:1.5px;
-    classDef model fill:#fff9f0,stroke:#f39c12,stroke-width:1.5px;
-
-    UI["Web UI / CLI 介面"]:::ui
-    API["Flask 伺服器 (app.py) / CLI 入口 (main.py)"]:::app
-    Engine["結帳引擎 (engine.py)"]:::app
-    Parser["文字解析器 (parser.py)"]:::model
-    Models["領域實體模型 (models.py)"]:::model
-
-    UI --> API
-    API --> Engine
-    Engine --> Parser
-    Engine --> Models
-```
-
-### 2. 專案目錄結構
-
 ```text
 wisdom_garden_inter/
 ├── shopping_cart/          # 結帳核心模組
-│   ├── models.py           # 領域實體 (Cart, Product, Promotion, Coupon...)
-│   ├── parser.py           # 強健文字輸入解析器
-│   └── engine.py           # 結帳計算引擎
+│   ├── models.py           # 主要模組 (Cart, Product, Promotion, Coupon...)
+│   ├── parser.py           # 輸入解析器
+│   └── engine.py           # 結帳計算
 ├── tests/                  # 測試用例與資料 (case_a.txt, case_b.txt)
 ├── static/ & templates/    # 前端 Web 控制面板
 ├── main.py                 # 命令列 CLI 進入點
@@ -55,6 +32,19 @@ wisdom_garden_inter/
    - **品類促銷折扣 (`Promotion`)**：比對結算日與品類，若當天該品類有多個折扣活動，系統自動採用最優解（折扣率最低者）。
    - **滿額優惠券 (`Coupon`)**：先套用完品類促銷折抵後，再判定是否達到優惠券門檻且未過期，滿足則進行金額扣減。
    - **結算順序**：商品原價小計 $\rightarrow$ 套用品類促銷 $\rightarrow$ 套用滿額優惠券 $\rightarrow$ 四捨五入輸出。
+
+---
+
+## 🧪 自動化測試
+
+本專案具備完整的單元測試庫（位於 `tests/test_engine.py`），精準覆蓋以下商業邏輯與邊界情境：
+
+* **官方測項驗證**：精確通過官方的 `Case A` 與 `Case B` 基準值。
+* **高精度四捨五入 (`ROUND_HALF_UP`)**：精準測試小數點後第三位臨界值（如 `.225` 進位至 `.23`；`.224` 捨去至 `.22`）。
+* **多促銷最優尋優**：驗證同品類在同天有多個促銷活動時，系統能自動尋優並套用折扣最深（折扣率最低）的策略。
+* **優惠券多重邊界**：包含優惠券過期判定、未達滿額門檻判定，以及折扣後小計剛好達到門檻的高精度臨界點。
+* **強健解析與容錯**：驗證輸入資料包含多種不規則空白、連續換行與 `//` 行註解時的自動剝離與容錯能力。
+* **API 詳細結構**：驗證用於前端的 JSON 詳細結算資訊（各品項折抵金額、大計）欄位正確性。
 
 ---
 

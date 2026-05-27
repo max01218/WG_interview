@@ -7,17 +7,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnCheckout = document.getElementById("btnCheckout");
     const errorBox = document.getElementById("errorBox");
     const errorMessage = document.getElementById("errorMessage");
-    
+
     const receiptPlaceholder = document.getElementById("receiptPlaceholder");
     const receiptContent = document.getElementById("receiptContent");
-    
+
     // 收據輸出欄位
     const resDate = document.getElementById("resDate");
     const resItemList = document.getElementById("resItemList");
     const resRawSubtotal = document.getElementById("resRawSubtotal");
     const resPromoSavings = document.getElementById("resPromoSavings");
     const resDiscountedSubtotal = document.getElementById("resDiscountedSubtotal");
-    
+
     const resCouponCard = document.getElementById("resCouponCard");
     const couponExpire = document.getElementById("couponExpire");
     const couponThreshold = document.getElementById("couponThreshold");
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const couponStatusBadge = document.getElementById("couponStatusBadge");
     const couponSavingsRow = document.getElementById("couponSavingsRow");
     const resCouponSavings = document.getElementById("resCouponSavings");
-    
+
     const resFinalTotal = document.getElementById("resFinalTotal");
 
     // 商品目錄展開與收起
@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function renderReceipt(data) {
         errorBox.classList.add("hidden");
         receiptPlaceholder.classList.add("hidden");
-        
+
         // 重啟收據動畫
         receiptContent.classList.remove("hidden");
         receiptContent.style.animation = 'none';
@@ -148,7 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
         data.items.forEach(item => {
             const itemRow = document.createElement("div");
             itemRow.className = "item-row";
-            
+
             // 品類 CSS Tag 對應
             let catClass = "tag-other";
             if (item.category === "電子") catClass = "tag-electronics";
@@ -157,8 +157,8 @@ document.addEventListener("DOMContentLoaded", () => {
             else if (item.category === "酒類") catClass = "tag-alcohol";
 
             const hasPromo = item.applied_promo !== null;
-            const promoPill = hasPromo 
-                ? `<span class="item-discount-pill">已折 ${Math.round((1 - parseFloat(item.applied_promo.rate)) * 100)}%</span>` 
+            const promoPill = hasPromo
+                ? `<span class="item-discount-pill">已折 ${Math.round((1 - parseFloat(item.applied_promo.rate)) * 100)}%</span>`
                 : "";
 
             itemRow.innerHTML = `
@@ -181,7 +181,7 @@ document.addEventListener("DOMContentLoaded", () => {
             couponExpire.textContent = data.coupon.expire_date;
             couponThreshold.textContent = parseFloat(data.coupon.threshold).toFixed(0);
             couponDiscount.textContent = parseFloat(data.coupon.discount_amount).toFixed(0);
-            
+
             if (data.coupon_applied) {
                 couponStatusBadge.textContent = "已啟用";
                 couponStatusBadge.className = "coupon-status-badge badge-success";
@@ -192,10 +192,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 // 判定未啟用原因
                 const todayParts = data.settlement_date.split('.').map(Number);
                 const expireParts = data.coupon.expire_date.split('.').map(Number);
-                
+
                 const todayDate = new Date(todayParts[0], todayParts[1] - 1, todayParts[2]);
                 const expireDate = new Date(expireParts[0], expireParts[1] - 1, expireParts[2]);
-                
+
                 if (todayDate > expireDate) {
                     couponStatusBadge.textContent = "已過期";
                     couponStatusBadge.className = "coupon-status-badge badge-fail";
