@@ -69,9 +69,6 @@ python main.py tests/case_a.txt
 
 # 讀取 Case B 範例檔
 python main.py tests/case_b.txt
-
-# 互動式或管道輸入
-cat tests/case_a.txt | python main.py
 ```
 
 ### 4. 啟動 Web 控制面板
