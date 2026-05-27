@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,10 +8,13 @@
     <!-- 載入 Google FontsOutfit & Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <!-- 引入自訂樣式表 -->
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
+
 <body>
     <div class="decor-circle circle-1"></div>
     <div class="decor-circle circle-2"></div>
@@ -34,7 +38,7 @@
 
         <!-- 主控制面板 -->
         <main class="dashboard-grid">
-            
+
             <!-- 左側：輸入編輯面板 -->
             <section class="panel editor-panel animate-slide-up">
                 <div class="panel-header">
@@ -64,7 +68,8 @@
                     <button class="btn btn-primary" id="btnCheckout">
                         <span>開始結算</span>
                         <svg class="arrow-icon" viewBox="0 0 24 24" width="16" height="16">
-                            <path fill="currentColor" d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-8.29-1.42 1.42L16.86 11H5v2z"/>
+                            <path fill="currentColor"
+                                d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-8.29-1.42 1.42L16.86 11H5v2z" />
                         </svg>
                     </button>
                 </div>
@@ -122,7 +127,6 @@
                     <div class="receipt-header">
                         <h3>WISDOM GARDEN INC.</h3>
                         <p class="receipt-date">結算日期：<span id="resDate">-</span></p>
-                        <div class="receipt-barcode">||||| | |||| ||| || ||||</div>
                     </div>
 
                     <div class="receipt-divider"></div>
@@ -151,7 +155,7 @@
                             <span>品類促銷後總額</span>
                             <span class="price-val" id="resDiscountedSubtotal">$ 0.00</span>
                         </div>
-                        
+
                         <!-- 優惠券展示區 -->
                         <div class="coupon-status-card" id="resCouponCard">
                             <div class="coupon-header">
@@ -176,7 +180,6 @@
                     <div class="receipt-total-section">
                         <div class="total-label">
                             <h3>實際需支付金額</h3>
-                            <p>已採用 ROUND_HALF_UP 四捨五入處理</p>
                         </div>
                         <div class="total-amount-display">
                             <span class="currency-symbol">$</span>
@@ -184,11 +187,6 @@
                         </div>
                     </div>
 
-                    <!-- 底部謝卡 -->
-                    <div class="receipt-footer">
-                        <p>感謝您的光臨，本系統採用高精度 Decimal 結算！</p>
-                        <p class="footer-slogan">用科技改變教育，讓教學與管理更簡單</p>
-                    </div>
                 </div>
             </section>
         </main>
@@ -197,4 +195,5 @@
     <!-- 載入控制邏輯 -->
     <script src="/static/js/app.js"></script>
 </body>
+
 </html>
